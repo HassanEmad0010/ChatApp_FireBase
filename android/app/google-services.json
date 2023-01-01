@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "48884043512",
+    "project_id": "my-chat-prj-firebase",
+    "storage_bucket": "my-chat-prj-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48884043512:android:3ee616208c4708f51c750d",
+        "android_client_info": {
+          "package_name": "com.example.new_chat_app_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48884043512-dd4t8at794etj6311k5hmak9rdls20mn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGauyCZ_qa6Rr18gNItdDMX9hKDFVZl9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48884043512-dd4t8at794etj6311k5hmak9rdls20mn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "48884043512-311neb9n1h3q98b9ud3f8etnamtbudg5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.newChatAppFirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
