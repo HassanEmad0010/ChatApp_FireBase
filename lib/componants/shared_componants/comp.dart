@@ -1,4 +1,5 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ textFormFeiled(
  required String hintText,
   bool isPassword =false,
   TextInputType textInputType=TextInputType.text,
-  required Function(String) onChanged,
+   Function(String)? onChanged,
 
 }
     )
@@ -20,6 +21,16 @@ textFormFeiled(
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: TextFormField(
+
+      validator:(data){
+
+        if (data!.isEmpty && (hintText=="Email"|| hintText=="New Password" ) )
+          {
+            return "Can't be empty";
+          }
+      } ,
+
+
       onChanged: onChanged,
 
       obscureText:isPassword ,
@@ -74,4 +85,20 @@ materialButton(
   );
 
 
+}
+
+
+
+Future<void> userCredentialEmailPass({required String email, required String pass}) async {
+  UserCredential userCredential = await FirebaseAuth.instance
+      .createUserWithEmailAndPassword(
+    email: email,
+    password: pass,
+
+  );
+}
+
+void showSnackBarMethod({required BuildContext context, required String dataSnackBar,bool isDone=false }) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
+   isDone? Text(" Registration Done, your Email: $dataSnackBar"): Text(" Registration Failed: $dataSnackBar ")   ));
 }
