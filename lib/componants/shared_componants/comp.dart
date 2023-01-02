@@ -21,12 +21,11 @@ textFormFeiled(
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: TextFormField(
-
       validator:(data){
 
         if (data!.isEmpty && (hintText=="Email"|| hintText=="New Password" ) )
           {
-            return "Can't be empty";
+            return "Sorry but $hintText Can't be empty";
           }
       } ,
 

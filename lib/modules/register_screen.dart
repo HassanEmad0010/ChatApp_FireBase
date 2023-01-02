@@ -4,16 +4,26 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../componants/shared_componants/comp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   late String emailData;
+
   late String passwordData;
+
   late String nameData;
+
   bool isLoading= false;
+
   GlobalKey<FormState> formKey= GlobalKey();
 
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
+     blur: 3,
       inAsyncCall: isLoading,
       child: Scaffold(
         backgroundColor: kPrimaryColor,
@@ -95,10 +105,16 @@ class RegisterScreen extends StatelessWidget {
                   onTap: () async {
 
                     if (formKey.currentState!.validate()) {
+                      isLoading=true;
+                      setState(() {
+
+                      });
                       try {
                       //  Firebase.initializeApp();
                         await userCredentialEmailPass(email: emailData,pass: passwordData);
                         showSnackBarMethod(context: context, dataSnackBar: emailData,isDone: true);
+                        isLoading=false;
+                        Navigator.pop(context);
 
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
@@ -108,6 +124,9 @@ class RegisterScreen extends StatelessWidget {
                       } catch (e) {
                         print(e);
                       }
+                      setState(() {
+                        isLoading=false;
+                      });
                     }
                   },
                 ),
@@ -143,8 +162,4 @@ class RegisterScreen extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 }
