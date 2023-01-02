@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       try {
                       //  Firebase.initializeApp();
                         await userCredentialEmailPass(email: emailData,pass: passwordData);
-                        showSnackBarMethod(context: context, dataSnackBar: emailData,isDone: true);
+                        showSnackBarMethod(context: context, dataSnackBar: "Your registered email is: $emailData",isDone: true);
                         isLoading=false;
                         Navigator.pop(context);
 

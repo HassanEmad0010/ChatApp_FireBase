@@ -23,7 +23,8 @@ textFormFeiled(
     child: TextFormField(
       validator:(data){
 
-        if (data!.isEmpty && (hintText=="Email"|| hintText=="New Password" ) )
+        if (data!.isEmpty && (hintText=="Email"|| hintText=="New Password"||hintText=="Password" ) )
+      //    if (data!.isEmpty)
           {
             return "Sorry but $hintText Can't be empty";
           }
@@ -97,7 +98,21 @@ Future<void> userCredentialEmailPass({required String email, required String pas
   );
 }
 
+Future<void> userCredentialSignInWithEmailAndPassword (
+    {required String enteredEmail, required String enteredPass}
+    )
+async {
+   await FirebaseAuth.instance.
+  signInWithEmailAndPassword(
+      email: enteredEmail,
+      password: enteredPass);
+
+}
+
+
+
+
 void showSnackBarMethod({required BuildContext context, required String dataSnackBar,bool isDone=false }) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
-   isDone? Text(" Registration Done, your Email: $dataSnackBar"): Text(" Registration Failed: $dataSnackBar ")   ));
+   isDone? Text("Done! $dataSnackBar"): Text(" Registration Failed: $dataSnackBar ")   ));
 }
