@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:new_chat_app_firebase/modules/Chat_Screen.dart';
 import 'firebase_options.dart';
 import 'layout/HomeScreen.dart';
 
@@ -19,6 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes:
+          {
+           ChatSceen.id:(context)=>ChatSceen(),
+            HomeScreen.id:(context)=> HomeScreen(),
+
+          },
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
