@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,10 @@ import '../shared_componants/comp.dart';
 /*TextStyle chatTextStyle= const TextStyle(color: Colors.white,
 fontSize: 9,
 );*/
+
+ CollectionReference kMessages = FirebaseFirestore.instance.collection('messages');
+
+
 
 bubbleChatHisMessage()
 {
