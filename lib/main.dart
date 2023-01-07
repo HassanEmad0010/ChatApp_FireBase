@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes:
           {
-           ChatSceen.id:(context)=>ChatSceen(),
+           ChatScreen.id:(context)=>ChatScreen(),
             HomeScreen.id:(context)=> HomeScreen(),
 
           },

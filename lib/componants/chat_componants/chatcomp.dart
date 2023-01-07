@@ -13,7 +13,11 @@ fontSize: 9,
 
 
 
-bubbleChatHisMessage()
+bubbleChatHisMessage(
+{
+  required String comingMessage,
+}
+    )
 {
 return Align(
   alignment: Alignment.bottomLeft,
@@ -43,7 +47,7 @@ return Align(
     ),
 
     child:
-      const Text("Hi Hello world! Hello World hth t hth er fger er ggrg"
+       Text(comingMessage
         ,style: TextStyle(color: Colors.white,
         fontSize: 9,
       ),
