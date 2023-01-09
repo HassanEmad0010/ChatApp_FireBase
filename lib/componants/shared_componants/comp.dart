@@ -89,30 +89,13 @@ materialButton(
 
 
 
-Future<void> userCredentialEmailPass({required String email, required String pass}) async {
-  UserCredential userCredential = await FirebaseAuth.instance
-      .createUserWithEmailAndPassword(
-    email: email,
-    password: pass,
 
-  );
-}
-
-Future<void> userCredentialSignInWithEmailAndPassword (
-    {required String enteredEmail, required String enteredPass}
-    )
-async {
-   await FirebaseAuth.instance.
-  signInWithEmailAndPassword(
-      email: enteredEmail,
-      password: enteredPass);
-
-}
 
 
 
 
 void showSnackBarMethod({required BuildContext context, required String dataSnackBar,bool isDone=false }) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: 
    isDone? Text("Done! $dataSnackBar"): Text(" Registration Failed: $dataSnackBar ")   ));
 }
