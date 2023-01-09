@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:new_chat_app_firebase/layout/HomeScreen.dart';
+import 'package:new_chat_app_firebase/layout/LoginScreen.dart';
 import 'package:new_chat_app_firebase/modules/Chat_Screen.dart';
 
 import '../componants/shared_componants/comp.dart';
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         await userCredentialEmailPass(email: emailData,pass: passwordData);
                         showSnackBarMethod(context: context, dataSnackBar: "Your registered email is: $emailData",isDone: true);
                         isLoading=false;
-                        Navigator.pushNamed(context, HomeScreen.id);
+                        Navigator.pushNamed(context, LoginScreen.id);
 
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:new_chat_app_firebase/componants/chat_componants/message.dart';
 import 'package:new_chat_app_firebase/componants/shared_componants/comp.dart';
-import 'package:new_chat_app_firebase/layout/HomeScreen.dart';
+import 'package:new_chat_app_firebase/layout/LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../componants/chat_componants/chatcomp.dart';
@@ -29,7 +29,7 @@ class ChatScreen extends StatelessWidget {
           leading: IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.pushNamed(context, HomeScreen.id);
+              Navigator.pushNamed(context, LoginScreen.id);
             },
           ),
           title: const Text("My Chat App!"),
