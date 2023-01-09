@@ -1,5 +1,5 @@
 //// hasanemad1@gmail.com
-
+//h@g.com
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:new_chat_app_firebase/componants/chat_componants/message.dart';
@@ -7,138 +7,128 @@ import 'package:new_chat_app_firebase/componants/shared_componants/comp.dart';
 import 'package:new_chat_app_firebase/layout/HomeScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 import '../componants/chat_componants/chatcomp.dart';
 
-class ChatScreen extends StatefulWidget
-{
-  static String id ="ChatId";
+class ChatScreen extends StatelessWidget {
+  static String id = "ChatId";
 
-  @override
-  State<ChatScreen> createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   TextEditingController controller = new TextEditingController();
 
   List<Message> messagesList = [];
-
-
+    String onChangedTextMessage="";
+  ScrollController Listcontroller = new ScrollController();
 
   @override
   Widget build(BuildContext context) {
-
+    String receivedEmail = ModalRoute.of(context)!.settings.arguments as String;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon:const Icon( Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: () {
               Navigator.pushNamed(context, HomeScreen.id);
             },
           ),
-          title:const Text("My Chat App!"),
-        centerTitle: true,
+          title: const Text("My Chat App!"),
+          centerTitle: true,
         ),
+        body: (StreamBuilder<QuerySnapshot>(
+            stream:
+                kMessages.orderBy(messageTime, descending: true).snapshots(),
+            builder: (BuildContext context, snapshot) {
+              if (snapshot.hasData) {
+                messagesList.clear();
 
-        body: (
-            FutureBuilder<QuerySnapshot>(
+                int snapShotSize = snapshot.data!.size;
+                print("snapshot size is: $snapShotSize");
 
-              future: kMessages.get(),
-              builder:(BuildContext context,snapshot) {
-      if ( snapshot.hasData ) {
-      int snapShotSize=  snapshot.data!.size;
-            print("snapshot size is: $snapShotSize");
+                for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                  print("snapshot data is ${snapshot.data!.docs[i].id}");
+                  messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
+                }
 
-            for (int i=0 ; i< snapshot.data!.docs.length;i++)
-              {
-                print ("snapshot data is ${snapshot.data!.docs[i].id}");
-                messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
-              }
-            return Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: snapShotSize,
-                      itemBuilder: (context, index) {
-                        print("index  is: $index");
-                        print("list size is  : ${messagesList.length}");
-                        print("list is  : ${messagesList[index].messageVar}");
+                return Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                          reverse: true,
+                          controller: Listcontroller,
+                          itemCount: snapShotSize,
+                          itemBuilder: (context, index) {
+                            print("index  is: $index");
+                            print("list size is  : ${messagesList.length}");
+                            print("list is  : ${messagesList[index].messageVar}");
 
-                    return bubbleChatHisMessage(comingMessage:messagesList[index].messageVar );
-                  }
-
-                  ),
-                ),
-
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: TextField(
-                    controller: controller,
-                    onSubmitted: (val) {
-
-                      kMessages.add({"message": val});
-
-                      setState(() {
-
-                      });
-                      controller.clear();
-                    },
-
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                          icon: const Icon(Icons.send),
-                          onPressed: () {
-
-                            controller.clear();
-                            setState(() {
-
-                            });
-                            controller.clear();
-                          },),
-                      enabledBorder: OutlineInputBorder(
-                        //gapPadding: 10,
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: Colors.blueAccent),
-
-                      ),
-                      border: OutlineInputBorder(
-                        //gapPadding: 10,
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: const BorderSide(color: kPrimaryColor),
-
-                      ),
-
-
+                            if (receivedEmail ==
+                                messagesList[index].messageEmailVar) {
+                              return bubbleChatMyMessage(
+                                  comingMessage:
+                                      messagesList[index].messageVar);
+                            } else {
+                              return bubbleChatHisMessage(
+                                  comingMessage:
+                                      messagesList[index].messageVar);
+                            }
+                          }),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: TextField(
+                        textInputAction: TextInputAction.newline,
+                        onChanged: (changedVal){
+                          onChangedTextMessage = changedVal;
+                        },
+                        controller: controller,
+                        /*onSubmitted: (val) {
+                          addToFirebase(textValue: val, receivedEmail: receivedEmail);
+                          controller.clear();
+                          Listcontroller.animateTo(0,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        },*/
+                        decoration: InputDecoration(
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.send),
+                            onPressed: () {
+                              if (onChangedTextMessage.isNotEmpty)
+                              {
+                                addToFirebase(
+                                    textValue: onChangedTextMessage,
+                                    receivedEmail: receivedEmail);
+                                Listcontroller.animateTo(0,
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.ease);
+                                controller.clear();
 
-                  ),
-                ),
-              ],
-            );
-
-
-    }
-    else
-      {
-        return const Center(child: CircularProgressIndicator());
-      }
-      return const Center(child: CircularProgressIndicator());
+                              }
+                              onChangedTextMessage="";
+                            },
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            //gapPadding: 10,
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide:
+                                const BorderSide(color: Colors.blueAccent),
+                          ),
+                          border: OutlineInputBorder(
+                            //gapPadding: 10,
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: const BorderSide(color: kPrimaryColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
               }
-
-
-            )
-
-        ),
-
-
+              return const Center(child: CircularProgressIndicator());
+            })),
       ),
-
-
     );
-
-
   }
 }

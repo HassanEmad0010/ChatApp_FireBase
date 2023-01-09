@@ -94,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         //await userCredentialEmailPass(email: "hassan", pass: "1234");
                         print ("success log in");
                         showSnackBarMethod(context: context, dataSnackBar: "Success Log-In",isDone: true);
-                        Navigator.pushNamed(context, ChatScreen.id);
+                        Navigator.pushNamed(context, ChatScreen.id,
+                            arguments:enteredEmail );
                         isLoading=false;
                         setState(() {
 

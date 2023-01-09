@@ -11,6 +11,23 @@ fontSize: 9,
 
  CollectionReference kMessages = FirebaseFirestore.instance.collection('messages');
 
+  String messageText = "message";
+  String messageTime= "messageTime";
+  String messageEmail= "messageEmail";
+
+
+  void addToFirebase(
+{
+  required String textValue,
+  required String receivedEmail,
+})
+  {
+    kMessages.add({
+      messageText: textValue,
+      messageTime: DateTime.now(),
+      messageEmail:receivedEmail,
+    });
+  }
 
 
 bubbleChatHisMessage(
@@ -48,8 +65,8 @@ return Align(
 
     child:
        Text(comingMessage
-        ,style: TextStyle(color: Colors.white,
-        fontSize: 9,
+        ,style: const TextStyle(color: Colors.white,
+        fontSize: 16,
       ),
       ),
   ),
@@ -58,31 +75,46 @@ return Align(
 }
 
 
-
-bubbleChatMyMessage()
+bubbleChatMyMessage(
+    {
+      required String comingMessage,
+    }
+    )
 {
-  return Container(
-
-    padding: const EdgeInsets.only(left: 20),
-    margin:const EdgeInsets.all(17),
-
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.only(
-        bottomRight: Radius.circular(30),
-        topRight: Radius.circular(30),
-        topLeft: Radius.circular(30),
-
+  return Align(
+    alignment: Alignment.bottomRight,
+    child:   Container(
+      //padding to control the widget inside the container as the container
+      padding: const EdgeInsets.only(
+          left: 20,
+          right: 30 ,
+          top: 28,
+          bottom: 28),
+      //margin to control the container itself
+      margin:const EdgeInsets.only(
+        left: 5,
+        top: 10,
+        bottom: 10,
+        right: 25,
       ),
-      color: Colors.blue,
-    ),
-    alignment: Alignment.centerLeft,
-    height: 70,
-    width: 210,
 
-    child:
-    const Text("Hello mesh World",style: TextStyle(color: Colors.white,
-      fontSize: 9,
-    ),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+         // bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+          topLeft: Radius.circular(30),
+
+        ),
+        color: Colors.green,
+      ),
+
+      child:
+      Text(comingMessage
+        ,style: const TextStyle(color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
     ),
   )  ;
 
