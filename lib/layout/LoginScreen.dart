@@ -54,7 +54,8 @@ class LoginScreen extends StatelessWidget {
           backgroundColor: kPrimaryColor,
           body: Form(
             key: formKeyHome,
-            child: ListView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Spacer(
                   flex: 2,
@@ -64,15 +65,18 @@ class LoginScreen extends StatelessWidget {
                   size: 60,
                   color: Colors.green,
                 ),
+                const SizedBox(
+                  height: 8,
+                ),
                 const Text(
                   "My Chat",
                   style: TextStyle(fontSize: 30, color: Colors.yellow),
                   textAlign: TextAlign.center,
                 ),
-                const Text(
+               /* const Text(
                   "Sign In",
                   style: TextStyle(fontSize: 25, color: Colors.white),
-                ),
+                ),*/
                 const SizedBox(
                   height: 8,
                 ),

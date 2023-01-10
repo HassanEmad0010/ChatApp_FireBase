@@ -11,7 +11,7 @@ class ChatCubit extends Cubit<ChatState> {
   // ChatCubit() : super(ChatInitialState());
   late var randomNumber;
 
-  Future<void> addColorToUser({
+  /*Future<void> addColorToUser({
     //required int colorCode,
     required String email,
   }) async {
@@ -19,5 +19,5 @@ class ChatCubit extends Cubit<ChatState> {
     print("rand color number is $randomNumber ");
     await addUserColorToFirebase(
         colorValue: randomNumber, receivedEmail: email);
-  }
+  }*/
 }

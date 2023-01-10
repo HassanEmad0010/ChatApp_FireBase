@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_chat_app_firebase/cubit/chat/chat_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/login/login_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/register/register_cubit.dart';
 import 'package:new_chat_app_firebase/modules/Chat_Screen.dart';
@@ -10,7 +11,7 @@ import 'layout/LoginScreen.dart';
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -25,22 +26,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-        BlocProvider (create: (BuildContext context) => LoginCubit()),
-        BlocProvider (create: (BuildContext context) => RegisterCubit()),
-    ],
-
-
-
-
-
+      providers: [
+        BlocProvider(create: (BuildContext context) => LoginCubit()),
+        BlocProvider(create: (BuildContext context) => RegisterCubit()),
+        BlocProvider(create: (BuildContext context) => ChatCubit()),
+      ],
       child: MaterialApp(
-        routes:
-            {
-             ChatScreen.id:(context)=>ChatScreen(),
-              LoginScreen.id:(context)=> LoginScreen(),
-
-            },
+        routes: {
+          ChatScreen.id: (context) => ChatScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
+        },
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
