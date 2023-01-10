@@ -30,6 +30,11 @@ class ChatScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () {
               Navigator.pushNamed(context, LoginScreen.id);
+              // to pop all screens in the stack
+              Navigator.popUntil(context, ModalRoute.withName('/'));
+
+
+              //Navigator.pop(context);
             },
           ),
           title: const Text("My Chat App!"),

@@ -30,11 +30,12 @@ class LoginScreen extends StatelessWidget {
         else if (state is LoginSuccessState)
           {
             print("success log in"),
-            showSnackBarMethod(
+           /* showSnackBarMethod(
                 context: context,
                 dataSnackBar:
                     BlocProvider.of<LoginCubit>(context).logoinFailedCode,
-                isDone: true),
+                isDone: true),*/
+
             Navigator.pushNamed(context, ChatScreen.id,
                 arguments: enteredEmail),
             isLoading = false,
