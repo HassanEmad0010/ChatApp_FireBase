@@ -1,5 +1,7 @@
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,89 +11,55 @@ import '../shared_componants/comp.dart';
 fontSize: 9,
 );*/
 
- CollectionReference kMessages = FirebaseFirestore.instance.collection('messages');
+CollectionReference kMessages =
+    FirebaseFirestore.instance.collection('messages');
+CollectionReference kUsersColors =
+    FirebaseFirestore.instance.collection("users_colors");
 
-  String messageText = "message";
-  String messageTime= "messageTime";
-  String messageEmail= "messageEmail";
+String messageText = "message";
+String messageTime = "messageTime";
+String messageEmail = "messageEmail";
 
-
-  void addToFirebase(
-{
+void addToFirebase({
   required String textValue,
   required String receivedEmail,
-})
-  {
-    kMessages.add({
-      messageText: textValue,
-      messageTime: DateTime.now(),
-      messageEmail:receivedEmail,
-    });
+}) {
+  kMessages.add({
+    messageText: textValue,
+    messageTime: DateTime.now(),
+    messageEmail: receivedEmail,
+  });
+}
+
+int generateColorCode() {
+  var rng = Random();
+  for (var i = 0; i < 10; i++) {
+    print("random number is  ${rng.nextInt(100)}");
   }
+  return rng.nextInt(100);
+}
 
+Future<void> addUserColorFirebase({
+  required String userEmail,
+}) async {
+  int userColorCode;
+  userColorCode = generateColorCode();
+  kUsersColors.add({
+    "color": userColorCode,
+    "user": userEmail,
+  });
+}
 
-bubbleChatHisMessage(
-{
+bubbleChatHisMessage({
   required String comingMessage,
-}
-    )
-{
-return Align(
-  alignment: Alignment.bottomLeft,
-  child:   Container(
-    //padding to control the widget inside the container as the container
-    padding: const EdgeInsets.only(
-        left: 20,
-        right: 30 ,
-        top: 28,
-        bottom: 28),
-    //margin to control the container itself
-    margin:const EdgeInsets.only(
-     left: 5,
-      top: 10,
-      bottom: 10,
-      right: 25,
-    ),
-
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.only(
-        bottomRight: Radius.circular(30),
-        topRight: Radius.circular(30),
-        topLeft: Radius.circular(30),
-
-      ),
-      color: kPrimaryColor,
-    ),
-
-    child:
-       Text(comingMessage
-        ,style: const TextStyle(color: Colors.white,
-        fontSize: 16,
-      ),
-      ),
-  ),
-)  ;
-
-}
-
-
-bubbleChatMyMessage(
-    {
-      required String comingMessage,
-    }
-    )
-{
+}) {
   return Align(
-    alignment: Alignment.bottomRight,
-    child:   Container(
+    alignment: Alignment.bottomLeft,
+    child: Container(
       //padding to control the widget inside the container as the container
-      padding: const EdgeInsets.only(
-          left: 20,
-          right: 30 ,
-          top: 28,
-          bottom: 28),
+      padding: const EdgeInsets.only(left: 20, right: 30, top: 28, bottom: 28),
       //margin to control the container itself
-      margin:const EdgeInsets.only(
+      margin: const EdgeInsets.only(
         left: 5,
         top: 10,
         bottom: 10,
@@ -100,24 +68,57 @@ bubbleChatMyMessage(
 
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
-         // bottomRight: Radius.circular(30),
-          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
           topRight: Radius.circular(30),
           topLeft: Radius.circular(30),
-
         ),
-        color: Colors.green,
+        color: kPrimaryColor,
       ),
 
-      child:
-      Text(comingMessage
-        ,style: const TextStyle(color: Colors.white,
+      child: Text(
+        comingMessage,
+        style: const TextStyle(
+          color: Colors.white,
           fontSize: 16,
         ),
       ),
     ),
-  )  ;
-
+  );
 }
 
+bubbleChatMyMessage({
+  required String comingMessage,
+}) {
+  return Align(
+    alignment: Alignment.bottomRight,
+    child: Container(
+      //padding to control the widget inside the container as the container
+      padding: const EdgeInsets.only(left: 20, right: 30, top: 28, bottom: 28),
+      //margin to control the container itself
+      margin: const EdgeInsets.only(
+        left: 5,
+        top: 10,
+        bottom: 10,
+        right: 25,
+      ),
 
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          // bottomRight: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+          topLeft: Radius.circular(30),
+        ),
+        color: Colors.green,
+      ),
+
+      child: Text(
+        comingMessage,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+    ),
+  );
+}
