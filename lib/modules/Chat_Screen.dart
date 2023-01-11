@@ -1,14 +1,17 @@
 //// hasanemad1@gmail.com
 //h@g.com
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_chat_app_firebase/componants/chat_componants/message.dart';
+import 'package:new_chat_app_firebase/componants/chat_componants/userColorModel.dart';
 import 'package:new_chat_app_firebase/componants/shared_componants/comp.dart';
 import 'package:new_chat_app_firebase/cubit/chat/chat_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/chat/chat_state.dart';
 import 'package:new_chat_app_firebase/layout/LoginScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../componants/chat_componants/chatcomp.dart';
 
@@ -20,26 +23,28 @@ class ChatScreen extends StatelessWidget {
   TextEditingController controller = new TextEditingController();
 
   List<Message> messagesList = [];
+
     String onChangedTextMessage="";
   ScrollController Listcontroller = new ScrollController();
+
+
 
   @override
   Widget build(BuildContext context) {
     String receivedEmail = ModalRoute.of(context)!.settings.arguments as String;
+   late int colorCodeFromList;
     return BlocConsumer<ChatCubit,ChatState>(
      listener: (context,state) =>
      {
        if(state is ChatSuccessState)
-         {}
+         {
+         }
        else if(state is ChatInitialState)
          {
 
          }
        
-           
-             
-             
-           
+
      } ,
       builder: ( context,state )=> MaterialApp(
         home: Scaffold(
@@ -58,19 +63,24 @@ class ChatScreen extends StatelessWidget {
             title: const Text("My Chat App!"),
             centerTitle: true,
           ),
-          body: (StreamBuilder<QuerySnapshot>(
+
+          body:
+          StreamBuilder<QuerySnapshot>(
               stream:
-                  kMessages.orderBy(messageTime, descending: true).snapshots(),
+              kMessages.orderBy(messageTime, descending: true).snapshots(),
+
               builder: (BuildContext context, snapshot) {
+                messagesList.clear();
                 if (snapshot.hasData) {
-                  messagesList.clear();
 
                   int snapShotSize = snapshot.data!.size;
-                  print("snapshot size is: $snapShotSize");
+                //  print("snapshot size is: $snapShotSize");
 
                   for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                    print("snapshot data is ${snapshot.data!.docs[i].id}");
+                   // print("snapshot data id is ${snapshot.data!.docs[i].id}");
                     messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
+                    //usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]));
+
                   }
 
                   return Column(
@@ -81,9 +91,9 @@ class ChatScreen extends StatelessWidget {
                             controller: Listcontroller,
                             itemCount: snapShotSize,
                             itemBuilder: (context, index) {
-                              print("index  is: $index");
-                              print("list size is  : ${messagesList.length}");
-                              print("list is  : ${messagesList[index].messageVar}");
+                            //  print("index  is: $index");
+                             // print("list size is  : ${messagesList.length}");
+                              //print("list is  : ${messagesList[index].messageVar}");
 
                               if (receivedEmail ==
                                   messagesList[index].messageEmailVar) {
@@ -91,11 +101,21 @@ class ChatScreen extends StatelessWidget {
                                     comingMessage:
                                         messagesList[index].messageVar);
                               } else {
-                                return bubbleChatHisMessage(
+
+
+                                    colorCodeFromList= getUserColorByMail(userEmail:messagesList[index].messageEmailVar );
+                                    print("index of colors is $index, mail from message list is"
+                                        " ${messagesList[index].messageEmailVar} color is $colorCodeFromList");
+
+                                    return bubbleChatHisMessage(
+                                  colorNumber: colorCodeFromList,
                                     comingMessage:
-                                        messagesList[index].messageVar);
+                                        messagesList[index].messageVar,
+                                );
+
                               }
                             }),
+
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16),
@@ -150,7 +170,7 @@ class ChatScreen extends StatelessWidget {
                   return const Center(child: CircularProgressIndicator());
                 }
                 return const Center(child: CircularProgressIndicator());
-              })),
+              }),
         ),
       ),
     );

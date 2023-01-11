@@ -1,12 +1,57 @@
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../chat_componants/userColorModel.dart';
+
 const kPrimaryColor = Colors.deepPurple;
 const kTextFillColor = Colors.white;
+List<UserColor> usersColorsList=[];
 
+void fillUserColorList ({required int userColorFromFirebase, required emailColorFromFirebase})
+{
+  usersColorsList.add(UserColor.fromJson(
+    {
 
+      "color":userColorFromFirebase,
+      "user":emailColorFromFirebase,
+    }
+  )
+  );
+  print("added to color list, the size of list is ${usersColorsList.length}");
+ // print("color is ${usersColorsList[2].color} ");
+}
+
+int getUserColorByMail({required String userEmail})
+{
+ late int colrVar;
+ print("email to search is $userEmail");
+ printColorsList();
+  for (int i=0 ;i<usersColorsList.length;i++)
+    {
+     if(userEmail== usersColorsList[i].email)
+       {
+         colrVar= usersColorsList[i].color;
+         print("Color of email: $userEmail is: $colrVar");
+       }
+     else
+       {
+         colrVar=0;
+         print("color of mail: $userEmail not found!");
+       }
+    }
+  return colrVar;
+}
+
+void printColorsList()
+{
+  print("color list size is: ${usersColorsList.length}");
+  for (int i=0 ;i<usersColorsList.length;i++)
+    {
+      print("color list of index $i is ${usersColorsList[i].color}  email is ${usersColorsList[i].email}  ");
+    }
+
+}
 
 textFormFeiled(
 {

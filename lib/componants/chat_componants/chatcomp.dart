@@ -31,7 +31,7 @@ void addToFirebase({
   });
 }
 
-int generateColorCode() {
+int _generateColorCode() {
   var rng = Random();
   for (var i = 0; i < 10; i++) {
     print("random number is  ${rng.nextInt(100)}");
@@ -43,15 +43,22 @@ Future<void> addUserColorFirebase({
   required String userEmail,
 }) async {
   int userColorCode;
-  userColorCode = generateColorCode();
+  userColorCode = _generateColorCode();
   kUsersColors.add({
     "color": userColorCode,
     "user": userEmail,
   });
 }
 
+
+
+
+
+
+
 bubbleChatHisMessage({
   required String comingMessage,
+ required int colorNumber,
 }) {
   return Align(
     alignment: Alignment.bottomLeft,
@@ -65,16 +72,16 @@ bubbleChatHisMessage({
         bottom: 10,
         right: 25,
       ),
-
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomRight: Radius.circular(30),
-          topRight: Radius.circular(30),
-          topLeft: Radius.circular(30),
+      decoration:  BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          bottomRight:const Radius.circular(30),
+          topRight:const Radius.circular(30),
+          topLeft:const Radius.circular(30),
         ),
-        color: kPrimaryColor,
+        color:
+        Color(0xA4150120+colorNumber*3),
+        //Color.fromRGBO(colorNumber+100, colorNumber+10, colorNumber+20, 0.85),
       ),
-
       child: Text(
         comingMessage,
         style: const TextStyle(
