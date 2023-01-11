@@ -64,105 +64,106 @@ class LoginScreen extends StatelessWidget {
           ),
             backgroundColor: kPrimaryColor,
          // backgroundColor: Colors.indigoAccent,
-            body: Form(
-              key: formKeyHome,
-              child: Column(
-               //  mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(
-                    flex: 1,
-                  ),
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Form(
+                      key: formKeyHome,
+                      child: Column(
+                       //  mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                         Image(image: AssetImage("assets/DALLE.ChapChat.png")),
+                          textFormFeiled(
+                              hintText: "Email",
+                              onChanged: (String val) {
+                                enteredEmail = val;
+                              }),
 
-                 const Expanded(flex: 4,child: Image(image: AssetImage("assets/DALLE.ChapChat.png"))),
-
-
-
-
-
-                  textFormFeiled(
-                      hintText: "Email",
-                      onChanged: (String val) {
-                        enteredEmail = val;
-                      }),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  textFormFeiled(
-                      onChanged: (String val) {
-                        enteredPassword = val;
-                      },
-                      hintText: "Password",
-                      isPassword: true),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  materialButton(
-                      buttonText: "Sign-In",
-                      onTap: () async {
-                        if (formKeyHome.currentState!.validate()) {
-                          if (enteredEmail.isNotEmpty &&
-                              enteredPassword.isNotEmpty) {
-                            await BlocProvider.of<LoginCubit>(context)
-                                .userCredentialSignInWithEmailAndPassword(
-                                    enteredEmail: enteredEmail,
-                                    enteredPass: enteredPassword);
-                            if(snapshot.hasData)
-                              {
-                                for (int i =0;i<snapshot.data!.size;i++) {
-                                  usersColorsList.clear();
-
-                                  fillUserColorList(userColorFromFirebase: snapshot.data!.docs[i]["color"], emailColorFromFirebase:snapshot.data!.docs[i]["user"] );
-                                  //  usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]) ) ;
-                                }
-                              }
-                            else {
-                              print("no color data");
-                            }
-
-
-
-
-
-
-                            print("sign in pressed!");
-                          }
-
-                        }
-                        ;
-                      }),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account ?",
-                          style: TextStyle(color: Colors.yellowAccent)),
-                      TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return RegisterScreen();
-                                },
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.login_outlined,
-                            color: Colors.green,
+                          const SizedBox(
+                            height: 7,
                           ),
-                          label: Text(
-                            "Register now",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
-                  ),
-                  const Spacer(
-                    flex: 2,
-                  ),
-                ],
+                          textFormFeiled(
+                              onChanged: (String val) {
+                                enteredPassword = val;
+                              },
+                              hintText: "Password",
+                              isPassword: true),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          materialButton(
+                              buttonText: "Sign-In",
+                              onTap: () async {
+                                if (formKeyHome.currentState!.validate()) {
+                                  if (enteredEmail.isNotEmpty &&
+                                      enteredPassword.isNotEmpty) {
+                                    await BlocProvider.of<LoginCubit>(context)
+                                        .userCredentialSignInWithEmailAndPassword(
+                                            enteredEmail: enteredEmail,
+                                            enteredPass: enteredPassword);
+                                    if(snapshot.hasData)
+                                      {
+                                        for (int i =0;i<snapshot.data!.size;i++) {
+                                          usersColorsList.clear();
+
+                                          fillUserColorList(userColorFromFirebase: snapshot.data!.docs[i]["color"], emailColorFromFirebase:snapshot.data!.docs[i]["user"] );
+                                          //  usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]) ) ;
+                                        }
+                                      }
+                                    else {
+                                      print("no color data");
+                                    }
+
+
+
+
+
+
+                                    print("sign in pressed!");
+                                  }
+
+                                }
+                                ;
+                              }),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Don't have an account ?",
+                                  style: TextStyle(color: Colors.yellowAccent)),
+                              TextButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return RegisterScreen();
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.login_outlined,
+                                    color: Colors.green,
+                                  ),
+                                  label: Text(
+                                    "Register now",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ],
+                          ),
+                          /*const Spacer(
+                            flex: 2,
+                          ),*/
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
         ),

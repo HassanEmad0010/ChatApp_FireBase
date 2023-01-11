@@ -61,95 +61,72 @@ class RegisterScreen extends StatelessWidget {
             backgroundColor: kPrimaryColor,
           ),
 
-          body: Form(
-            key: formKey,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Form(
+                    key: formKey,
 
-            child: Flex(
-              direction: Axis.vertical,
-              children: [
+                    child: Column(
+                      children: [
 
-                 const Expanded(flex: 2,child: Image(image: AssetImage("assets/DALLE.ChapChat.png"))),
+                         const  Image(image: AssetImage("assets/DALLE.ChapChat.png")),
 
-                Expanded(
-                  flex: 4,
-                  child: Flex(
+                        textFormFeiled(
+                          hintText: "Email",
+                          textInputType: TextInputType.emailAddress,
+                          onChanged: (String data) {
+                            BlocProvider.of<RegisterCubit>(context).emailData = data;
+                          },
+                        ),
+
+                        textFormFeiled(
+                            hintText: "New Password",
+                            isPassword: true,
+                            onChanged: (data) {
+                              BlocProvider.of<RegisterCubit>(context).passwordData = data;
+                            }),
+
+                        materialButton(
+                          buttonText: "Confirm",
+                          onTap: () async {
+
+                            if (formKey.currentState!.validate() ) {
+
+                              await BlocProvider.of<RegisterCubit>(context).userCredentialEmailPass(email: BlocProvider.of<RegisterCubit>(context).emailData, pass: BlocProvider.of<RegisterCubit>(context).passwordData);
+
+                            }
+                          },
+                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Already have an account ?",
+                                  style: TextStyle(color: Colors.yellow)),
+                              TextButton.icon(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(
+                                    Icons.login_outlined,
+                                    color: Colors.green,
+                                  ),
+                                  label: const Text(
+                                    "Sign in now",
+                                    style: TextStyle(color: Colors.white),
+                                  )),
+                            ],
+                          ),
 
 
-                    direction: Axis.vertical,
-                    children: [
-/*
 
-                     textFormFeiled(
-                      onChanged: (String val) {
-                        nameData=val;
-
-                      },
-                      hintText: "Name",
-                      textInputType: TextInputType.name),
-
-                  textFormFeiled(
-                      //onChanged: (String val) {},
-                      hintText: "Address",
-                      textInputType: TextInputType.streetAddress),
-
-                  textFormFeiled(
-                      //onChanged: (String val) {},
-                      hintText: "Phone Number",
-                      textInputType: TextInputType.number),
-*/
-
-                    textFormFeiled(
-                      hintText: "Email",
-                      textInputType: TextInputType.emailAddress,
-                      onChanged: (String data) {
-                        BlocProvider.of<RegisterCubit>(context).emailData = data;
-                      },
+                      ],
                     ),
-
-                    textFormFeiled(
-                        hintText: "New Password",
-                        isPassword: true,
-                        onChanged: (data) {
-                          BlocProvider.of<RegisterCubit>(context).passwordData = data;
-                        }),
-
-                    materialButton(
-                      buttonText: "Confirm",
-                      onTap: () async {
-
-                        if (formKey.currentState!.validate() ) {
-
-                          await BlocProvider.of<RegisterCubit>(context).userCredentialEmailPass(email: BlocProvider.of<RegisterCubit>(context).emailData, pass: BlocProvider.of<RegisterCubit>(context).passwordData);
-
-                        }
-                      },
-                    ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Already have an account ?",
-                              style: TextStyle(color: Colors.yellow)),
-                          TextButton.icon(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: const Icon(
-                                Icons.login_outlined,
-                                color: Colors.green,
-                              ),
-                              label: const Text(
-                                "Sign in now",
-                                style: TextStyle(color: Colors.white),
-                              )),
-                        ],
-                      ),
-                  ],
                   ),
-                ),
-
-
-
-              ],
+                ],
+              ),
             ),
           ),
         ),
