@@ -33,11 +33,6 @@ class LoginScreen extends StatelessWidget {
         else if (state is LoginSuccessState)
           {
             print("success log in"),
-           /* showSnackBarMethod(
-                context: context,
-                dataSnackBar:
-                    BlocProvider.of<LoginCubit>(context).logoinFailedCode,
-                isDone: true),*/
 
             Navigator.pushNamed(context, ChatScreen.id,
                 arguments: enteredEmail),
@@ -52,6 +47,7 @@ class LoginScreen extends StatelessWidget {
             isLoading = false,
           }
       },
+
       builder: (context, LoginState) =>
 
           StreamBuilder<QuerySnapshot>(
@@ -59,35 +55,30 @@ class LoginScreen extends StatelessWidget {
             builder: (BuildContext context, snapshot)=>ModalProgressHUD(
         inAsyncCall: isLoading,
         child: Scaffold(
+          appBar: AppBar(
+            title: Text("Chap Chat!",style: TextStyle(color: Colors.cyan,letterSpacing: 2),),
+            titleSpacing: 120,
+            elevation: 15,
+            centerTitle: true,
             backgroundColor: kPrimaryColor,
+          ),
+            backgroundColor: kPrimaryColor,
+         // backgroundColor: Colors.indigoAccent,
             body: Form(
               key: formKeyHome,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+               //  mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Spacer(
-                    flex: 2,
+                    flex: 1,
                   ),
-                  const Icon(
-                    Icons.messenger_outline,
-                    size: 60,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                    "My Chat",
-                    style: TextStyle(fontSize: 30, color: Colors.yellow),
-                    textAlign: TextAlign.center,
-                  ),
-                 /* const Text(
-                    "Sign In",
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),*/
-                  const SizedBox(
-                    height: 8,
-                  ),
+
+                 const Expanded(flex: 4,child: Image(image: AssetImage("assets/DALLE.ChapChat.png"))),
+
+
+
+
+
                   textFormFeiled(
                       hintText: "Email",
                       onChanged: (String val) {
@@ -146,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text("Don't have an account ?",
-                          style: TextStyle(color: Colors.yellow)),
+                          style: TextStyle(color: Colors.yellowAccent)),
                       TextButton.icon(
                           onPressed: () {
                             Navigator.push(

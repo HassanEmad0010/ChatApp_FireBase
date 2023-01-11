@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../chat_componants/userColorModel.dart';
 
-const kPrimaryColor = Colors.deepPurple;
+const kPrimaryColor = Colors.indigo;
 const kTextFillColor = Colors.white;
+// const AssetImage logoImage = AssetImage("assets/DALLE.ChapChat.png") ;
 List<UserColor> usersColorsList=[];
 
 void fillUserColorList ({required int userColorFromFirebase, required emailColorFromFirebase})
@@ -124,8 +125,8 @@ materialButton(
     )
 {
   return MaterialButton(onPressed: onTap,
-    textColor: kPrimaryColor,
-    color: Colors.white,
+    textColor: Colors.white,
+    color: Colors.lightBlue,
     child:Text(buttonText),
   );
 

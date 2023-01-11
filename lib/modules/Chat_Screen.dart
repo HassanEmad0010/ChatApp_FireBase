@@ -24,31 +24,22 @@ class ChatScreen extends StatelessWidget {
 
   List<Message> messagesList = [];
 
-    String onChangedTextMessage="";
+  String onChangedTextMessage = "";
   ScrollController Listcontroller = new ScrollController();
-
-
 
   @override
   Widget build(BuildContext context) {
     String receivedEmail = ModalRoute.of(context)!.settings.arguments as String;
-   late int colorCodeFromList;
-    return BlocConsumer<ChatCubit,ChatState>(
-     listener: (context,state) =>
-     {
-       if(state is ChatSuccessState)
-         {
-         }
-       else if(state is ChatInitialState)
-         {
-
-         }
-       
-
-     } ,
-      builder: ( context,state )=> MaterialApp(
+    late int colorCodeFromList;
+    return BlocConsumer<ChatCubit, ChatState>(
+      listener: (context, state) => {
+        if (state is ChatSuccessState) {} else if (state is ChatInitialState) {}
+      },
+      builder: (context, state) => MaterialApp(
         home: Scaffold(
+          backgroundColor: Colors.white,
           appBar: AppBar(
+            backgroundColor: kPrimaryColor,
             leading: IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
@@ -56,28 +47,23 @@ class ChatScreen extends StatelessWidget {
                 // to pop all screens in the stack
                 Navigator.popUntil(context, ModalRoute.withName('/'));
 
-
                 //Navigator.pop(context);
               },
             ),
-            title: const Text("My Chat App!"),
+            title: const Text("Chap Chat!"),
             centerTitle: true,
           ),
-
-          body:
-          StreamBuilder<QuerySnapshot>(
+          body: StreamBuilder<QuerySnapshot>(
               stream:
-              kMessages.orderBy(messageTime, descending: true).snapshots(),
-
+                  kMessages.orderBy(messageTime, descending: true).snapshots(),
               builder: (BuildContext context, snapshot) {
                 messagesList.clear();
                 if (snapshot.hasData) {
-
                   int snapShotSize = snapshot.data!.size;
-                //  print("snapshot size is: $snapShotSize");
+                  //  print("snapshot size is: $snapShotSize");
 
                   for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                   // print("snapshot data id is ${snapshot.data!.docs[i].id}");
+                    // print("snapshot data id is ${snapshot.data!.docs[i].id}");
                     messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
                     //usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]));
 
@@ -91,8 +77,8 @@ class ChatScreen extends StatelessWidget {
                             controller: Listcontroller,
                             itemCount: snapShotSize,
                             itemBuilder: (context, index) {
-                            //  print("index  is: $index");
-                             // print("list size is  : ${messagesList.length}");
+                              //  print("index  is: $index");
+                              // print("list size is  : ${messagesList.length}");
                               //print("list is  : ${messagesList[index].messageVar}");
 
                               if (receivedEmail ==
@@ -101,27 +87,25 @@ class ChatScreen extends StatelessWidget {
                                     comingMessage:
                                         messagesList[index].messageVar);
                               } else {
+                                colorCodeFromList = getUserColorByMail(
+                                    userEmail:
+                                        messagesList[index].messageEmailVar);
+                                print(
+                                    "index of colors is $index, mail from message list is"
+                                    " ${messagesList[index].messageEmailVar} color is $colorCodeFromList");
 
-
-                                    colorCodeFromList= getUserColorByMail(userEmail:messagesList[index].messageEmailVar );
-                                    print("index of colors is $index, mail from message list is"
-                                        " ${messagesList[index].messageEmailVar} color is $colorCodeFromList");
-
-                                    return bubbleChatHisMessage(
+                                return bubbleChatHisMessage(
                                   colorNumber: colorCodeFromList,
-                                    comingMessage:
-                                        messagesList[index].messageVar,
+                                  comingMessage: messagesList[index].messageVar,
                                 );
-
                               }
                             }),
-
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16),
                         child: TextField(
                           textInputAction: TextInputAction.newline,
-                          onChanged: (changedVal){
+                          onChanged: (changedVal) {
                             onChangedTextMessage = changedVal;
                           },
                           controller: controller,
@@ -136,18 +120,17 @@ class ChatScreen extends StatelessWidget {
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.send),
                               onPressed: () {
-                                if (onChangedTextMessage.isNotEmpty)
-                                {
+                                if (onChangedTextMessage.isNotEmpty) {
                                   addToFirebase(
                                       textValue: onChangedTextMessage,
                                       receivedEmail: receivedEmail);
                                   Listcontroller.animateTo(0,
-                                      duration: const Duration(milliseconds: 500),
+                                      duration:
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.ease);
                                   controller.clear();
-
                                 }
-                                onChangedTextMessage="";
+                                onChangedTextMessage = "";
                               },
                             ),
                             enabledBorder: OutlineInputBorder(
@@ -159,7 +142,8 @@ class ChatScreen extends StatelessWidget {
                             border: OutlineInputBorder(
                               //gapPadding: 10,
                               borderRadius: BorderRadius.circular(16),
-                              borderSide: const BorderSide(color: kPrimaryColor),
+                              borderSide:
+                                  const BorderSide(color: kPrimaryColor),
                             ),
                           ),
                         ),

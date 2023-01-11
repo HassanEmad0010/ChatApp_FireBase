@@ -53,116 +53,103 @@ class RegisterScreen extends StatelessWidget {
         inAsyncCall: isLoading,
         child: Scaffold(
           backgroundColor: kPrimaryColor,
-          body: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: Form(
-              key: formKey,
-              child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Icon(
-                    Icons.messenger_outline,
-                    size: 60,
-                    color: Colors.green,
-                  ),
-                  const Text(
-                    "My Chat",
-                    style: TextStyle(fontSize: 30, color: Colors.yellow),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                    "Register",
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  textFormFeiled(
+
+          appBar: AppBar(
+            elevation: 20,
+            title: Text("Log in",style: TextStyle(color: Colors.cyan,letterSpacing: 2),),
+
+            backgroundColor: kPrimaryColor,
+          ),
+
+          body: Form(
+            key: formKey,
+
+            child: Flex(
+              direction: Axis.vertical,
+              children: [
+
+                 const Expanded(flex: 2,child: Image(image: AssetImage("assets/DALLE.ChapChat.png"))),
+
+                Expanded(
+                  flex: 4,
+                  child: Flex(
+
+
+                    direction: Axis.vertical,
+                    children: [
+/*
+
+                     textFormFeiled(
                       onChanged: (String val) {
                         nameData=val;
 
                       },
                       hintText: "Name",
                       textInputType: TextInputType.name),
-                  const SizedBox(
-                    height: 8,
-                  ),
+
                   textFormFeiled(
                       //onChanged: (String val) {},
                       hintText: "Address",
                       textInputType: TextInputType.streetAddress),
-                  const SizedBox(
-                    height: 8,
-                  ),
+
                   textFormFeiled(
                       //onChanged: (String val) {},
                       hintText: "Phone Number",
                       textInputType: TextInputType.number),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  textFormFeiled(
-                    hintText: "Email",
-                    textInputType: TextInputType.emailAddress,
-                    onChanged: (String data) {
-                      BlocProvider.of<RegisterCubit>(context).emailData = data;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  textFormFeiled(
-                      hintText: "New Password",
-                      isPassword: true,
-                      onChanged: (data) {
-                        BlocProvider.of<RegisterCubit>(context).passwordData = data;
-                      }),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  materialButton(
-                    buttonText: "Confirm",
-                    onTap: () async {
+*/
 
-                      if (formKey.currentState!.validate() ) {
+                    textFormFeiled(
+                      hintText: "Email",
+                      textInputType: TextInputType.emailAddress,
+                      onChanged: (String data) {
+                        BlocProvider.of<RegisterCubit>(context).emailData = data;
+                      },
+                    ),
 
-                            await BlocProvider.of<RegisterCubit>(context).userCredentialEmailPass(email: BlocProvider.of<RegisterCubit>(context).emailData, pass: BlocProvider.of<RegisterCubit>(context).passwordData);
+                    textFormFeiled(
+                        hintText: "New Password",
+                        isPassword: true,
+                        onChanged: (data) {
+                          BlocProvider.of<RegisterCubit>(context).passwordData = data;
+                        }),
 
-                      }
-                    },
+                    materialButton(
+                      buttonText: "Confirm",
+                      onTap: () async {
+
+                        if (formKey.currentState!.validate() ) {
+
+                          await BlocProvider.of<RegisterCubit>(context).userCredentialEmailPass(email: BlocProvider.of<RegisterCubit>(context).emailData, pass: BlocProvider.of<RegisterCubit>(context).passwordData);
+
+                        }
+                      },
+                    ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Already have an account ?",
+                              style: TextStyle(color: Colors.yellow)),
+                          TextButton.icon(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: const Icon(
+                                Icons.login_outlined,
+                                color: Colors.green,
+                              ),
+                              label: const Text(
+                                "Sign in now",
+                                style: TextStyle(color: Colors.white),
+                              )),
+                        ],
+                      ),
+                  ],
                   ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Already have an account ?",
-                          style: TextStyle(color: Colors.yellow)),
-                      TextButton.icon(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.login_outlined,
-                            color: Colors.green,
-                          ),
-                          label: const Text(
-                            "Sign in now",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                ],
-              ),
+                ),
+
+
+
+              ],
             ),
           ),
         ),
