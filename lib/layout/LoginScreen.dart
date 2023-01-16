@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,11 +20,10 @@ class LoginScreen extends StatelessWidget {
   GlobalKey<FormState> formKeyHome = GlobalKey();
   static String id = "HomeScreen";
 
-  String enteredPassword = "00", enteredEmail = "00";
-
   @override
   Widget build(BuildContext context) {
     bool isLoading = false;
+    LoginCubit loginCubit = BlocProvider.of<LoginCubit>(context);
 
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) => {
@@ -33,37 +34,34 @@ class LoginScreen extends StatelessWidget {
         else if (state is LoginSuccessState)
           {
             print("success log in"),
-
             Navigator.pushNamed(context, ChatScreen.id,
-                arguments: enteredEmail),
+                arguments: loginCubit.enteredEmail),
             isLoading = false,
           }
         else if (state is LoginFailedState)
           {
             showSnackBarMethod(
-                context: context,
-                dataSnackBar:
-                    BlocProvider.of<LoginCubit>(context).logoinFailedCode),
+                context: context, dataSnackBar: loginCubit.logoinFailedCode),
             isLoading = false,
           }
       },
-
-      builder: (context, LoginState) =>
-
-          StreamBuilder<QuerySnapshot>(
-            stream: kUsersColors.snapshots(),
-            builder: (BuildContext context, snapshot)=>ModalProgressHUD(
-        inAsyncCall: isLoading,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("Chap Chat!",style: TextStyle(color: Colors.cyan,letterSpacing: 2),),
-            titleSpacing: 120,
-            elevation: 15,
-            centerTitle: true,
+      builder: (context, loginState) => StreamBuilder<QuerySnapshot>(
+        stream: kUsersColors.snapshots(),
+        builder: (BuildContext context, snapshot) => ModalProgressHUD(
+          inAsyncCall: isLoading,
+          child: Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                "Chap Chat!",
+                style: TextStyle(color: Colors.cyan, letterSpacing: 2),
+              ),
+              titleSpacing: 120,
+              elevation: 15,
+              centerTitle: true,
+              backgroundColor: kPrimaryColor,
+            ),
             backgroundColor: kPrimaryColor,
-          ),
-            backgroundColor: kPrimaryColor,
-         // backgroundColor: Colors.indigoAccent,
+            // backgroundColor: Colors.indigoAccent,
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -72,21 +70,21 @@ class LoginScreen extends StatelessWidget {
                     Form(
                       key: formKeyHome,
                       child: Column(
-                       //  mainAxisAlignment: MainAxisAlignment.center,
+                        //  mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                         Image(image: AssetImage("assets/DALLE.ChapChat.png")),
+                          const Image(
+                              image: AssetImage("assets/DALLE.ChapChat.png")),
                           textFormFeiled(
                               hintText: "Email",
                               onChanged: (String val) {
-                                enteredEmail = val;
+                                loginCubit.enteredEmail = val;
                               }),
-
                           const SizedBox(
                             height: 7,
                           ),
                           textFormFeiled(
                               onChanged: (String val) {
-                                enteredPassword = val;
+                                loginCubit.enteredPassword = val;
                               },
                               hintText: "Password",
                               isPassword: true),
@@ -97,33 +95,33 @@ class LoginScreen extends StatelessWidget {
                               buttonText: "Sign-In",
                               onTap: () async {
                                 if (formKeyHome.currentState!.validate()) {
-                                  if (enteredEmail.isNotEmpty &&
-                                      enteredPassword.isNotEmpty) {
-                                    await BlocProvider.of<LoginCubit>(context)
+                                  if (loginCubit.enteredEmail.isNotEmpty &&
+                                      loginCubit.enteredPassword.isNotEmpty) {
+                                    await loginCubit
                                         .userCredentialSignInWithEmailAndPassword(
-                                            enteredEmail: enteredEmail,
-                                            enteredPass: enteredPassword);
-                                    if(snapshot.hasData)
-                                      {
-                                        for (int i =0;i<snapshot.data!.size;i++) {
-                                          usersColorsList.clear();
+                                            enteredEmail:
+                                                loginCubit.enteredEmail,
+                                            enteredPass:
+                                                loginCubit.enteredPassword);
+                                    if (snapshot.hasData) {
+                                      for (int i = 0;
+                                          i < snapshot.data!.size;
+                                          i++) {
+                                        usersColorsList.clear();
 
-                                          fillUserColorList(userColorFromFirebase: snapshot.data!.docs[i]["color"], emailColorFromFirebase:snapshot.data!.docs[i]["user"] );
-                                          //  usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]) ) ;
-                                        }
+                                        fillUserColorList(
+                                            userColorFromFirebase:
+                                                snapshot.data!.docs[i]["color"],
+                                            emailColorFromFirebase:
+                                                snapshot.data!.docs[i]["user"]);
+                                        //  usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]) ) ;
                                       }
-                                    else {
+                                    } else {
                                       print("no color data");
                                     }
 
-
-
-
-
-
                                     print("sign in pressed!");
                                   }
-
                                 }
                                 ;
                               }),
@@ -146,11 +144,11 @@ class LoginScreen extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.login_outlined,
                                     color: Colors.green,
                                   ),
-                                  label: Text(
+                                  label: const Text(
                                     "Register now",
                                     style: TextStyle(color: Colors.white),
                                   )),
@@ -166,9 +164,9 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
         ),
       ),
-          ),
     );
   }
 }

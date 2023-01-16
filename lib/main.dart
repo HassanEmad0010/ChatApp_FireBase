@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           ChatScreen.id: (context) => ChatScreen(),
           LoginScreen.id: (context) => LoginScreen(),
         },
-        title: 'Flutter Demo',
+        title: 'Chap Chat',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

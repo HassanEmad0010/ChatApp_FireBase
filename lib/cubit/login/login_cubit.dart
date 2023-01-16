@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_chat_app_firebase/cubit/login/login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-    String logoinFailedCode="00";
+  String logoinFailedCode = "00";
+
+  late String enteredPassword;
+  late String enteredEmail;
 
   LoginCubit() : super(LoginInitialState());
   Future<void> userCredentialSignInWithEmailAndPassword(
@@ -13,23 +16,19 @@ class LoginCubit extends Cubit<LoginState> {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: enteredEmail, password: enteredPass);
       emit(LoginSuccessState());
-      logoinFailedCode="success log in";
+      logoinFailedCode = "success log in";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
-      logoinFailedCode=e.code;
+      logoinFailedCode = e.code;
       emit(LoginFailedState());
-
-    }
-
-    on Exception  catch (e) {
+    } on Exception catch (e) {
       print(e);
-      logoinFailedCode=e.toString();
+      logoinFailedCode = e.toString();
       emit(LoginFailedState());
-
     }
   }
 }

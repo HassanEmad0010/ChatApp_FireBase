@@ -8,59 +8,54 @@ import 'package:new_chat_app_firebase/layout/LoginScreen.dart';
 import '../componants/shared_componants/comp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-
-
 class RegisterScreen extends StatelessWidget {
-
-
   late String nameData;
 
-  bool isLoading= false;
+  bool isLoading = false;
 
-  GlobalKey<FormState> formKey= GlobalKey();
+  GlobalKey<FormState> formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterCubit,RegisterState>(
-      listener: (context,state)=>{
-        if(state is RegisterLoadingState)
+    return BlocConsumer<RegisterCubit, RegisterState>(
+      listener: (context, state) => {
+        if (state is RegisterLoadingState)
           {
-            isLoading=true,
-
+            isLoading = true,
           }
-        else if(state is RegisterSuccessState)
+        else if (state is RegisterSuccessState)
           {
-            isLoading=false,
-        showSnackBarMethod(context: context,
-            dataSnackBar: "Your registered email is: ${BlocProvider.of<RegisterCubit>(context).emailData}",isDone: true),
-
-
-        Navigator.pushNamed(context, LoginScreen.id),
-
-    }
+            isLoading = false,
+            showSnackBarMethod(
+                context: context,
+                dataSnackBar:
+                    "Your registered email is: ${BlocProvider.of<RegisterCubit>(context).emailData}",
+                isDone: true),
+            Navigator.pushNamed(context, LoginScreen.id),
+          }
         else if (state is RegisterFailedState)
           {
-            isLoading=false,
-      showSnackBarMethod(context: context,
-          dataSnackBar: BlocProvider.of<RegisterCubit>(context).registerFailedCode ,isDone: false),
+            isLoading = false,
+            showSnackBarMethod(
+                context: context,
+                dataSnackBar:
+                    BlocProvider.of<RegisterCubit>(context).registerFailedCode,
+                isDone: false),
           }
-
       },
-
-      builder:(context,RegisterState)=> ModalProgressHUD(
-       blur: 3,
+      builder: (context, RegisterState) => ModalProgressHUD(
+        blur: 3,
         inAsyncCall: isLoading,
         child: Scaffold(
           backgroundColor: kPrimaryColor,
-
           appBar: AppBar(
             elevation: 20,
-            title: Text("Log in",style: TextStyle(color: Colors.cyan,letterSpacing: 2),),
-
+            title: const Text(
+              "Log in",
+              style: TextStyle(color: Colors.cyan, letterSpacing: 2),
+            ),
             backgroundColor: kPrimaryColor,
           ),
-
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -68,60 +63,59 @@ class RegisterScreen extends StatelessWidget {
                 children: [
                   Form(
                     key: formKey,
-
                     child: Column(
                       children: [
-
-                         const  Image(image: AssetImage("assets/DALLE.ChapChat.png")),
-
+                        const Image(
+                            image: AssetImage("assets/DALLE.ChapChat.png")),
                         textFormFeiled(
                           hintText: "Email",
                           textInputType: TextInputType.emailAddress,
                           onChanged: (String data) {
-                            BlocProvider.of<RegisterCubit>(context).emailData = data;
+                            BlocProvider.of<RegisterCubit>(context).emailData =
+                                data;
                           },
                         ),
-
                         textFormFeiled(
                             hintText: "New Password",
                             isPassword: true,
                             onChanged: (data) {
-                              BlocProvider.of<RegisterCubit>(context).passwordData = data;
+                              BlocProvider.of<RegisterCubit>(context)
+                                  .passwordData = data;
                             }),
-
                         materialButton(
                           buttonText: "Confirm",
                           onTap: () async {
-
-                            if (formKey.currentState!.validate() ) {
-
-                              await BlocProvider.of<RegisterCubit>(context).userCredentialEmailPass(email: BlocProvider.of<RegisterCubit>(context).emailData, pass: BlocProvider.of<RegisterCubit>(context).passwordData);
-
+                            if (formKey.currentState!.validate()) {
+                              await BlocProvider.of<RegisterCubit>(context)
+                                  .userCredentialEmailPass(
+                                      email: BlocProvider.of<RegisterCubit>(
+                                              context)
+                                          .emailData,
+                                      pass: BlocProvider.of<RegisterCubit>(
+                                              context)
+                                          .passwordData);
                             }
                           },
                         ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("Already have an account ?",
-                                  style: TextStyle(color: Colors.yellow)),
-                              TextButton.icon(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.login_outlined,
-                                    color: Colors.green,
-                                  ),
-                                  label: const Text(
-                                    "Sign in now",
-                                    style: TextStyle(color: Colors.white),
-                                  )),
-                            ],
-                          ),
-
-
-
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Already have an account ?",
+                                style: TextStyle(color: Colors.yellow)),
+                            TextButton.icon(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  Icons.login_outlined,
+                                  color: Colors.green,
+                                ),
+                                label: const Text(
+                                  "Sign in now",
+                                  style: TextStyle(color: Colors.white),
+                                )),
+                          ],
+                        ),
                       ],
                     ),
                   ),
