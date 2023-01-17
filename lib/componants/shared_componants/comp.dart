@@ -54,6 +54,17 @@ void printColorsList()
 
 }
 
+ Widget getLogoDesign (double height, double width)
+{
+  return  SizedBox(
+    height: height / 3,
+    width: width / 2,
+    child: const Image(
+        image: AssetImage("assets/DALLE.ChapChat.png")),
+  );
+}
+
+
 textFormFeiled(
 {
  required String hintText,

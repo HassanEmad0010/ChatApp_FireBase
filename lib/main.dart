@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:new_chat_app_firebase/modules/Chat_Screen.dart';
 import 'componants/Bloc_Observer.dart';
 import 'firebase_options.dart';
 import 'layout/LoginScreen.dart';
+import 'modules/CodeScreen.dart';
 
 void main() async {
   Bloc.observer = SimpleBlocObserver();
@@ -16,7 +18,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  runApp(
+      //DevicePreview(
+    //  builder:(context) =>
+          MyApp() );
 }
 
 class MyApp extends StatelessWidget {
@@ -32,9 +37,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => ChatCubit()),
       ],
       child: MaterialApp(
+      //  builder: DevicePreview.appBuilder,
         routes: {
           ChatScreen.id: (context) => ChatScreen(),
           LoginScreen.id: (context) => LoginScreen(),
+          CodeScreen.id:(context)=>CodeScreen(),
         },
         title: 'Chap Chat',
         theme: ThemeData(

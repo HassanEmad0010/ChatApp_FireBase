@@ -5,6 +5,7 @@ import 'package:new_chat_app_firebase/cubit/register/register_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/register/register_state.dart';
 import 'package:new_chat_app_firebase/layout/LoginScreen.dart';
 
+import '../componants/shared_componants/Media_Query.dart';
 import '../componants/shared_componants/comp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -17,6 +18,14 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    RegisterCubit registerCubit = BlocProvider.of<RegisterCubit>(context);
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    Map<String, double> sizeMap = getSizesByMediaQ(mediaQueryData);
+    double? maxHeight = sizeMap["maxHeight"];
+    double? maxWidth = sizeMap["maxWidth"];
+
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) => {
         if (state is RegisterLoadingState)
@@ -29,7 +38,7 @@ class RegisterScreen extends StatelessWidget {
             showSnackBarMethod(
                 context: context,
                 dataSnackBar:
-                    "Your registered email is: ${BlocProvider.of<RegisterCubit>(context).emailData}",
+                    "Your registered email is: ${registerCubit.emailData}",
                 isDone: true),
             Navigator.pushNamed(context, LoginScreen.id),
           }
@@ -39,7 +48,7 @@ class RegisterScreen extends StatelessWidget {
             showSnackBarMethod(
                 context: context,
                 dataSnackBar:
-                    BlocProvider.of<RegisterCubit>(context).registerFailedCode,
+                registerCubit.registerFailedCode,
                 isDone: false),
           }
       },
@@ -49,7 +58,7 @@ class RegisterScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: kPrimaryColor,
           appBar: AppBar(
-            elevation: 20,
+            elevation: maxHeight!/20,
             title: const Text(
               "Log in",
               style: TextStyle(color: Colors.cyan, letterSpacing: 2),
@@ -58,41 +67,42 @@ class RegisterScreen extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.all(maxWidth!/20),
               child: Column(
                 children: [
                   Form(
                     key: formKey,
                     child: Column(
                       children: [
-                        const Image(
-                            image: AssetImage("assets/DALLE.ChapChat.png")),
+                        getLogoDesign(maxHeight,maxWidth),
+
                         textFormFeiled(
                           hintText: "Email",
                           textInputType: TextInputType.emailAddress,
                           onChanged: (String data) {
-                            BlocProvider.of<RegisterCubit>(context).emailData =
+                            registerCubit.emailData =
                                 data;
                           },
                         ),
+                        sizedBoxSpacer(height: maxHeight/70),
                         textFormFeiled(
                             hintText: "New Password",
                             isPassword: true,
                             onChanged: (data) {
-                              BlocProvider.of<RegisterCubit>(context)
+                              registerCubit
                                   .passwordData = data;
                             }),
+                        sizedBoxSpacer(height: maxHeight / 70),
+
                         materialButton(
                           buttonText: "Confirm",
                           onTap: () async {
                             if (formKey.currentState!.validate()) {
-                              await BlocProvider.of<RegisterCubit>(context)
+                              await registerCubit
                                   .userCredentialEmailPass(
-                                      email: BlocProvider.of<RegisterCubit>(
-                                              context)
+                                      email: registerCubit
                                           .emailData,
-                                      pass: BlocProvider.of<RegisterCubit>(
-                                              context)
+                                      pass: registerCubit
                                           .passwordData);
                             }
                           },

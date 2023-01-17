@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:new_chat_app_firebase/componants/chat_componants/userColorModel.dart';
+import 'package:new_chat_app_firebase/componants/shared_componants/Media_Query.dart';
 import 'package:new_chat_app_firebase/cubit/login/login_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/login/login_state.dart';
+import 'package:new_chat_app_firebase/modules/CodeScreen.dart';
 import 'package:new_chat_app_firebase/modules/register_screen.dart';
 
 import '../componants/chat_componants/chatcomp.dart';
@@ -24,6 +24,13 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isLoading = false;
     LoginCubit loginCubit = BlocProvider.of<LoginCubit>(context);
+    MediaQueryData mediaQueryData = MediaQuery.of(context);
+
+    Map<String, double> sizeMap = getSizesByMediaQ(mediaQueryData);
+    double? maxHeight = sizeMap["maxHeight"];
+    double? maxWidth = sizeMap["maxWidth"];
+
+    print("max h: $maxHeight and max w: $maxWidth ");
 
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) => {
@@ -34,7 +41,7 @@ class LoginScreen extends StatelessWidget {
         else if (state is LoginSuccessState)
           {
             print("success log in"),
-            Navigator.pushNamed(context, ChatScreen.id,
+            Navigator.pushNamed(context, CodeScreen.id,
                 arguments: loginCubit.enteredEmail),
             isLoading = false,
           }
@@ -55,8 +62,8 @@ class LoginScreen extends StatelessWidget {
                 "Chap Chat!",
                 style: TextStyle(color: Colors.cyan, letterSpacing: 2),
               ),
-              titleSpacing: 120,
-              elevation: 15,
+              titleSpacing: maxWidth! / 20,
+              elevation: maxHeight! / 20,
               centerTitle: true,
               backgroundColor: kPrimaryColor,
             ),
@@ -64,7 +71,7 @@ class LoginScreen extends StatelessWidget {
             // backgroundColor: Colors.indigoAccent,
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.all(maxWidth / 20),
                 child: Column(
                   children: [
                     Form(
@@ -72,25 +79,23 @@ class LoginScreen extends StatelessWidget {
                       child: Column(
                         //  mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Image(
-                              image: AssetImage("assets/DALLE.ChapChat.png")),
+                          sizedBoxSpacer(height: maxHeight / 20),
+                          getLogoDesign(maxHeight,maxWidth),
+
+                          //sizedBoxSpacer(height: 200),
                           textFormFeiled(
                               hintText: "Email",
                               onChanged: (String val) {
                                 loginCubit.enteredEmail = val;
                               }),
-                          const SizedBox(
-                            height: 7,
-                          ),
+                          sizedBoxSpacer(height: maxHeight / 70),
                           textFormFeiled(
                               onChanged: (String val) {
                                 loginCubit.enteredPassword = val;
                               },
                               hintText: "Password",
                               isPassword: true),
-                          const SizedBox(
-                            height: 8,
-                          ),
+                          sizedBoxSpacer(height: maxHeight / 70),
                           materialButton(
                               buttonText: "Sign-In",
                               onTap: () async {
@@ -125,14 +130,20 @@ class LoginScreen extends StatelessWidget {
                                 }
                                 ;
                               }),
-                          const SizedBox(
-                            height: 8,
-                          ),
+
+                       //   sizedBoxSpacer(height: maxHeight / 70),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Text("Don't have an account ?",
-                                  style: TextStyle(color: Colors.yellowAccent)),
+
+                              const Text(
+                                "Don't have an account ?",
+                                maxLines: 1,
+                                style: TextStyle(color: Colors.yellowAccent),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               TextButton.icon(
                                   onPressed: () {
                                     Navigator.push(
@@ -150,8 +161,13 @@ class LoginScreen extends StatelessWidget {
                                   ),
                                   label: const Text(
                                     "Register now",
-                                    style: TextStyle(color: Colors.white),
+                                    //overflow: TextOverflow.fade,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        overflow: TextOverflow.ellipsis),
                                   )),
+
                             ],
                           ),
                           /*const Spacer(
