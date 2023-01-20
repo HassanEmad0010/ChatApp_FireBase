@@ -20,16 +20,17 @@ class ChatScreen extends StatelessWidget {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  TextEditingController controller = new TextEditingController();
+  TextEditingController controller = TextEditingController();
 
   List<Message> messagesList = [];
 
   String onChangedTextMessage = "";
-  ScrollController Listcontroller = new ScrollController();
+  ScrollController Listcontroller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     String receivedEmail = ModalRoute.of(context)!.settings.arguments as String;
+ //   String receivedCode=ModalRoute.of(context)!.settings.arguments as String;
     late int colorCodeFromList;
     return BlocConsumer<ChatCubit, ChatState>(
       listener: (context, state) => {
@@ -50,7 +51,6 @@ class ChatScreen extends StatelessWidget {
                 //Navigator.pop(context);
               },
             ),
-            title: const Text("Chap Chat!"),
             centerTitle: true,
           ),
           body: StreamBuilder<QuerySnapshot>(

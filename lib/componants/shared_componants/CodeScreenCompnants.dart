@@ -1,11 +1,28 @@
 
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_chat_app_firebase/cubit/CodeScreen/Code_cubit.dart';
 
 import '../../cubit/login/login_cubit.dart';
 import '../../modules/Chat_Screen.dart';
+import 'CodeModel.dart';
 import 'comp.dart';
+
+
+//backend for CodeScreen
+
+
+
+CollectionReference kCreatingCodes= FirebaseFirestore.instance.collection("Creating_Codes");
+
+
+
+
+
 
 Widget codeScreenText(
 {
@@ -51,48 +68,3 @@ Widget joinCreateButton(
 
 
 
-SizedBox buildPopUpDialog(double maxHeight, double? maxWidth, BuildContext context, LoginCubit loginCubit,Color color,String textHint) {
-  return SizedBox(
-    height: maxHeight/2,
-    width: double.infinity,
-    child:Scaffold(
-        backgroundColor:Colors.transparent,
-        body:
-
-        Center(
-          child: Padding(
-            padding:EdgeInsets.all(maxHeight/100),
-            child: Container(
-              height: maxHeight/3,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.all(Radius.circular(maxHeight/15),
-                ),),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    joinCreateButton(maxWidth:maxWidth!/10,maxHeight: maxHeight/10,title: "",color: color),
-
-                    textFormFeiled(hintText: textHint),
-                    MaterialButton(
-                      elevation: 2,
-                      hoverColor: Colors.blue,
-                      focusColor: Colors.green,
-                        color: Colors.transparent,
-                        textColor: Colors.white,
-                        onPressed: (){
-                      Navigator.pushNamed(context, ChatScreen.id,
-                          arguments: loginCubit.enteredEmail);
-                    }, child: Text(textHint)),
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-        )
-    ),
-  );
-}

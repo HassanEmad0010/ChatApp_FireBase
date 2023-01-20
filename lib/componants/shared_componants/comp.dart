@@ -71,6 +71,7 @@ textFormFeiled(
   bool isPassword =false,
   TextInputType textInputType=TextInputType.text,
    Function(String)? onChanged,
+  TextEditingController? controller,
 
 }
     )
@@ -78,6 +79,7 @@ textFormFeiled(
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8.0),
     child: TextFormField(
+      controller: controller,
       validator:(data){
 
         if (data!.isEmpty && (hintText=="Email"|| hintText=="New Password"||hintText=="Password" ) )

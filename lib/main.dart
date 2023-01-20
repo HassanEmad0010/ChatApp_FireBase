@@ -7,6 +7,7 @@ import 'package:new_chat_app_firebase/cubit/login/login_cubit.dart';
 import 'package:new_chat_app_firebase/cubit/register/register_cubit.dart';
 import 'package:new_chat_app_firebase/modules/Chat_Screen.dart';
 import 'componants/Bloc_Observer.dart';
+import 'cubit/CodeScreen/Code_cubit.dart';
 import 'firebase_options.dart';
 import 'layout/LoginScreen.dart';
 import 'modules/CodeScreen.dart';
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (BuildContext context) => LoginCubit()),
         BlocProvider(create: (BuildContext context) => RegisterCubit()),
         BlocProvider(create: (BuildContext context) => ChatCubit()),
+        BlocProvider(create: (BuildContext context) => CodeCubit()),
+
       ],
       child: MaterialApp(
       //  builder: DevicePreview.appBuilder,
