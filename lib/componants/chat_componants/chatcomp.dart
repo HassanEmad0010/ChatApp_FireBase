@@ -19,15 +19,18 @@ CollectionReference kUsersColors =
 String messageText = "message";
 String messageTime = "messageTime";
 String messageEmail = "messageEmail";
+String messageCode="messageCode";
 
 void addToFirebase({
   required String textValue,
-  required String receivedEmail,
+  required String receivedEmail, required String receivedCode,
 }) {
   kMessages.add({
     messageText: textValue,
     messageTime: DateTime.now(),
     messageEmail: receivedEmail,
+    messageCode:receivedCode,
+
   });
 }
 

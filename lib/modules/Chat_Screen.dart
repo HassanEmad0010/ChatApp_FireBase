@@ -14,6 +14,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../componants/chat_componants/chatcomp.dart';
+import '../models/Arguments.dart';
 
 class ChatScreen extends StatelessWidget {
   static String id = "ChatId";
@@ -29,8 +30,13 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String receivedEmail = ModalRoute.of(context)!.settings.arguments as String;
+
+     Arguments? arguments  = ModalRoute.of(context)!.settings.arguments as Arguments?;
+    String receivedEmail= arguments!.enteredMail;
+    String receivedCode=arguments.enteredCode;
  //   String receivedCode=ModalRoute.of(context)!.settings.arguments as String;
+     print("enered mail is $receivedEmail \n"
+         "entered code is $receivedCode");
     late int colorCodeFromList;
     return BlocConsumer<ChatCubit, ChatState>(
       listener: (context, state) => {
@@ -77,28 +83,37 @@ class ChatScreen extends StatelessWidget {
                             controller: Listcontroller,
                             itemCount: snapShotSize,
                             itemBuilder: (context, index) {
-                              //  print("index  is: $index");
-                              // print("list size is  : ${messagesList.length}");
-                              //print("list is  : ${messagesList[index].messageVar}");
+                             if (receivedEmail ==
+                                 messagesList[index].messageEmailVar &&
+                                 receivedCode ==
+                                     messagesList[index].messageCode) {
+                               return bubbleChatMyMessage(
+                                   comingMessage:
+                                   messagesList[index].messageVar);
+                             } else if (receivedEmail !=
+                                 messagesList[index].messageEmailVar &&
+                                 receivedCode ==
+                                     messagesList[index].messageCode) {
+                               colorCodeFromList = getUserColorByMail(
+                                   userEmail:
+                                   messagesList[index].messageEmailVar);
+                               print(
+                                   "index of colors is $index, mail from message list is"
+                                       " ${messagesList[index]
+                                       .messageEmailVar} color is $colorCodeFromList");
 
-                              if (receivedEmail ==
-                                  messagesList[index].messageEmailVar) {
-                                return bubbleChatMyMessage(
-                                    comingMessage:
-                                        messagesList[index].messageVar);
-                              } else {
-                                colorCodeFromList = getUserColorByMail(
-                                    userEmail:
-                                        messagesList[index].messageEmailVar);
-                                print(
-                                    "index of colors is $index, mail from message list is"
-                                    " ${messagesList[index].messageEmailVar} color is $colorCodeFromList");
+                               return bubbleChatHisMessage(
+                                 colorNumber: colorCodeFromList,
+                                 comingMessage: messagesList[index].messageVar,
+                               );
+                             }
+                             else
+                             {
+                               return  Container(
+                                 child: Text("No data"),);
+                             }
 
-                                return bubbleChatHisMessage(
-                                  colorNumber: colorCodeFromList,
-                                  comingMessage: messagesList[index].messageVar,
-                                );
-                              }
+
                             }),
                       ),
                       Padding(
@@ -123,7 +138,9 @@ class ChatScreen extends StatelessWidget {
                                 if (onChangedTextMessage.isNotEmpty) {
                                   addToFirebase(
                                       textValue: onChangedTextMessage,
-                                      receivedEmail: receivedEmail);
+                                      receivedEmail: receivedEmail,
+                                  receivedCode: receivedCode,
+                                  );
                                   Listcontroller.animateTo(0,
                                       duration:
                                           const Duration(milliseconds: 500),

@@ -11,6 +11,7 @@ import '../componants/shared_componants/CodeScreenCompnants.dart';
 import '../componants/shared_componants/Media_Query.dart';
 import '../cubit/CodeScreen/Code_cubit.dart';
 import '../cubit/login/login_cubit.dart';
+import '../models/Arguments.dart';
 
 class CodeScreen extends StatelessWidget {
   static String id = "CodeScreenID";
@@ -127,8 +128,10 @@ class CodeScreen extends StatelessWidget {
                                                   print("bool contaaaaains is $isCodeExist");
                                                   if (isCodeExist)
                                                   {
+
+
                                                     Navigator.pushNamed(context, ChatScreen.id,
-                                                        arguments: loginCubit.enteredEmail);
+                                                        arguments:  Arguments(enteredMail: loginCubit.enteredEmail, enteredCode: codeCubit.codeEntered));
                                                     textEditingController.clear();
                                                   }
                                                   else
