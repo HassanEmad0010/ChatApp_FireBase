@@ -23,14 +23,14 @@ class ChatScreen extends StatelessWidget {
 
   TextEditingController controller = TextEditingController();
 
-  List<Message> messagesList = [];
+
 
   String onChangedTextMessage = "";
   ScrollController Listcontroller = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-
+    ChatCubit chatCubit= BlocProvider.of<ChatCubit>(context);
      Arguments? arguments  = ModalRoute.of(context)!.settings.arguments as Arguments?;
     String receivedEmail= arguments!.enteredMail;
     String receivedCode=arguments.enteredCode;
@@ -40,12 +40,14 @@ class ChatScreen extends StatelessWidget {
     late int colorCodeFromList;
     return BlocConsumer<ChatCubit, ChatState>(
       listener: (context, state) => {
-        if (state is ChatSuccessState) {} else if (state is ChatInitialState) {}
+        if (state is ChatSuccessAddMessageState) {} else if (state is ChatFailedAddMessageState) {}
+        else {},
       },
       builder: (context, state) => MaterialApp(
         home: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
+            title: Text(" ${receivedEmail.split("@").first.toUpperCase()} 👋"),
             backgroundColor: kPrimaryColor,
             leading: IconButton(
               icon: const Icon(Icons.logout),
@@ -61,19 +63,13 @@ class ChatScreen extends StatelessWidget {
           ),
           body: StreamBuilder<QuerySnapshot>(
               stream:
-                  kMessages.orderBy(messageTime, descending: true).snapshots(),
+                  chatCubit.createCodeDocAndGetMesseagesCollection(receivedCode).orderBy(messageTime, descending: true).snapshots(),
               builder: (BuildContext context, snapshot) {
-                messagesList.clear();
+                chatCubit.messagesList.clear();
                 if (snapshot.hasData) {
                   int snapShotSize = snapshot.data!.size;
                   //  print("snapshot size is: $snapShotSize");
-
-                  for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                    // print("snapshot data id is ${snapshot.data!.docs[i].id}");
-                    messagesList.add(Message.fromJson(snapshot.data!.docs[i]));
-                    //usersColorsList.add(UserColor.fromJson(snapshot.data!.docs[i]));
-
-                  }
+                  chatCubit.addMessageToList(snapshot, chatCubit);
 
                   return Column(
                     children: [
@@ -84,33 +80,33 @@ class ChatScreen extends StatelessWidget {
                             itemCount: snapShotSize,
                             itemBuilder: (context, index) {
                              if (receivedEmail ==
-                                 messagesList[index].messageEmailVar &&
+                                 chatCubit.messagesList[index].messageEmailVar &&
                                  receivedCode ==
-                                     messagesList[index].messageCode) {
+                                     chatCubit.messagesList[index].messageCode) {
                                return bubbleChatMyMessage(
                                    comingMessage:
-                                   messagesList[index].messageVar);
+                                   chatCubit.messagesList[index].messageVar);
                              } else if (receivedEmail !=
-                                 messagesList[index].messageEmailVar &&
+                                 chatCubit.messagesList[index].messageEmailVar &&
                                  receivedCode ==
-                                     messagesList[index].messageCode) {
+                                     chatCubit.messagesList[index].messageCode) {
                                colorCodeFromList = getUserColorByMail(
                                    userEmail:
-                                   messagesList[index].messageEmailVar);
+                                   chatCubit.messagesList[index].messageEmailVar);
                                print(
                                    "index of colors is $index, mail from message list is"
-                                       " ${messagesList[index]
+                                       " ${chatCubit.messagesList[index]
                                        .messageEmailVar} color is $colorCodeFromList");
 
                                return bubbleChatHisMessage(
+                                 hisMail:chatCubit.messagesList[index].messageEmailVar ,
                                  colorNumber: colorCodeFromList,
-                                 comingMessage: messagesList[index].messageVar,
+                                 comingMessage: chatCubit.messagesList[index].messageVar,
                                );
                              }
                              else
                              {
-                               return  Container(
-                                 child: Text("No data"),);
+                               return  const Text("No data");
                              }
 
 
@@ -124,22 +120,16 @@ class ChatScreen extends StatelessWidget {
                             onChangedTextMessage = changedVal;
                           },
                           controller: controller,
-                          /*onSubmitted: (val) {
-                            addToFirebase(textValue: val, receivedEmail: receivedEmail);
-                            controller.clear();
-                            Listcontroller.animateTo(0,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease);
-                          },*/
+
                           decoration: InputDecoration(
                             suffixIcon: IconButton(
                               icon: const Icon(Icons.send),
                               onPressed: () {
                                 if (onChangedTextMessage.isNotEmpty) {
-                                  addToFirebase(
+                                  chatCubit.addToFirebase(
                                       textValue: onChangedTextMessage,
                                       receivedEmail: receivedEmail,
-                                  receivedCode: receivedCode,
+                                  receivedCode: receivedCode, codeNumber: receivedCode,
                                   );
                                   Listcontroller.animateTo(0,
                                       duration:
@@ -168,7 +158,7 @@ class ChatScreen extends StatelessWidget {
                     ],
                   );
                 } else {
-                  return const Center(child: CircularProgressIndicator());
+                  return Container(child: const Center(child: CircularProgressIndicator()));
                 }
                 return const Center(child: CircularProgressIndicator());
               }),
@@ -176,4 +166,6 @@ class ChatScreen extends StatelessWidget {
       ),
     );
   }
+
+
 }

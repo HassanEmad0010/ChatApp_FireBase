@@ -11,28 +11,17 @@ import '../shared_componants/comp.dart';
 fontSize: 9,
 );*/
 
-CollectionReference kMessages =
-    FirebaseFirestore.instance.collection('messages');
+
 CollectionReference kUsersColors =
     FirebaseFirestore.instance.collection("users_colors");
+
 
 String messageText = "message";
 String messageTime = "messageTime";
 String messageEmail = "messageEmail";
 String messageCode="messageCode";
 
-void addToFirebase({
-  required String textValue,
-  required String receivedEmail, required String receivedCode,
-}) {
-  kMessages.add({
-    messageText: textValue,
-    messageTime: DateTime.now(),
-    messageEmail: receivedEmail,
-    messageCode:receivedCode,
 
-  });
-}
 
 int _generateColorCode() {
   var rng = Random();
@@ -60,6 +49,7 @@ Future<void> addUserColorFirebase({
 
 
 bubbleChatHisMessage({
+  required String hisMail,
   required String comingMessage,
  required int colorNumber,
 }) {
@@ -67,7 +57,7 @@ bubbleChatHisMessage({
     alignment: Alignment.bottomLeft,
     child: Container(
       //padding to control the widget inside the container as the container
-      padding: const EdgeInsets.only(left: 20, right: 30, top: 28, bottom: 28),
+      padding: const EdgeInsets.only(left: 15, right: 20, top: 18, bottom: 18),
       //margin to control the container itself
       margin: const EdgeInsets.only(
         left: 5,
@@ -85,13 +75,28 @@ bubbleChatHisMessage({
         Color(0xA4150120+colorNumber*3),
         //Color.fromRGBO(colorNumber+100, colorNumber+10, colorNumber+20, 0.85),
       ),
-      child: Text(
+      child:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:  [
+              Text(
+
+                "${hisMail.split("@").first.toUpperCase() }: "
+                ,style: const TextStyle(
+                backgroundColor: Colors.white12,
+                color: Colors.black
+,                fontSize: 12,
+              ),),
+              Text(
         comingMessage,
         style: const TextStyle(
           color: Colors.white,
           fontSize: 16,
         ),
       ),
+      ],
+
+          ),
     ),
   );
 }

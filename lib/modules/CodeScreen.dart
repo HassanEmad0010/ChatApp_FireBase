@@ -15,7 +15,9 @@ import '../models/Arguments.dart';
 
 class CodeScreen extends StatelessWidget {
   static String id = "CodeScreenID";
-  TextEditingController textEditingController=TextEditingController();
+  TextEditingController textEditingControllerJoin=TextEditingController();
+  TextEditingController textEditingControllerCreate=TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     CodeCubit codeCubit = BlocProvider.of<CodeCubit>(context);
@@ -102,7 +104,7 @@ class CodeScreen extends StatelessWidget {
                                                           color: Colors.cyan,
                                                         ),
                                                         textFormFeiled(
-                                                          controller: textEditingController,
+                                                          controller: textEditingControllerJoin,
                                                             hintText:
                                                                 "Enter the code",
                                                             onChanged: (value) {
@@ -128,16 +130,14 @@ class CodeScreen extends StatelessWidget {
                                                   print("bool contaaaaains is $isCodeExist");
                                                   if (isCodeExist)
                                                   {
-
-
                                                     Navigator.pushNamed(context, ChatScreen.id,
                                                         arguments:  Arguments(enteredMail: loginCubit.enteredEmail, enteredCode: codeCubit.codeEntered));
-                                                    textEditingController.clear();
+                                                    textEditingControllerJoin.clear();
                                                   }
                                                   else
                                                   {
                                                     print("this code ${codeCubit.codeEntered} isnt exist");
-                                                    textEditingController.clear();
+                                                    textEditingControllerJoin.clear();
                                                   }
 
 
@@ -214,6 +214,7 @@ class CodeScreen extends StatelessWidget {
                                                                 color: Colors.cyan,
                                                               ),
                                                               textFormFeiled(
+                                                                controller: textEditingControllerCreate,
                                                                   hintText:
                                                                       "Create a new code",
                                                                   onChanged: (value) {
@@ -239,13 +240,13 @@ class CodeScreen extends StatelessWidget {
                                                         if(isCodeAlreadyExist)
                                                         {
                                                           print("code already exist!");
-                                                          textEditingController.clear();
+                                                          textEditingControllerCreate.clear();
                                                         }
                                                         else {
                                                           codeCubit.addCodeFireStore(
                                                               codeCubit.codeEntered);
                                                           print("code ${codeCubit.codeEntered} inserted");
-                                                          textEditingController.clear();
+                                                          textEditingControllerCreate.clear();
                                                         }
                                                       },
                                                       child: const Text("Create a new Code")),
